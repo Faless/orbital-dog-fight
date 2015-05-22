@@ -19,8 +19,10 @@ var udp_timer = 0
 var udp_id = null
 
 class UDPClient:
+	const UDP_LIFETIME = 10
 	var udpstream = PacketPeerUDP.new()
 	var handler = null
+	var incoming = {}
 	
 	func _init(host, port):
 		udpstream.set_send_address( host, port )
@@ -31,19 +33,37 @@ class UDPClient:
 	func close():
 		udpstream.close()
 	
+	func add_incoming(data):
+		#print("Received partial message: ", data)
+		var id = data[0]
+		var c = data[2]
+		if not incoming.has(id):
+			incoming[id] = [{},OS.get_unix_time() + UDP_LIFETIME]
+		incoming[id][0][c] = data[3]
+		
+	func check_complete(id, len):
+		if incoming[id][0].keys().size() == len:
+			var s = ""
+			for i in range(len):
+				s += incoming[id][0][i]
+			incoming.erase(id)
+			var out = {}
+			if out.parse_json(s) == 0 and out.has("0"):
+				#print("Received full message: ", out["0"])
+				return out["0"]
+		return null
+	
 	func process_packets():
 		while udpstream.get_available_packet_count() > 0:
 			if handler != null:
-				print("Received packets!")
+				#print("Received packets!")
 				var data = udpstream.get_var()
-				print(typeof(data))
-				if typeof(data) == TYPE_ARRAY and data.size() == 2 and typeof(data[1]) == TYPE_STRING:
-					var parsed = {}
-					if parsed.parse_json(data[1]) == 0:
-						data[1] = parsed
-						handler.on_message(data)
-					else:
-						print("Unable to decode json: ", data[1])
+				if typeof(data) == TYPE_ARRAY and data.size() == 4 and typeof(data[0]) == TYPE_INT \
+						and typeof(data[1]) == TYPE_INT and typeof(data[2]) == TYPE_INT and typeof(data[3]) == TYPE_STRING:
+					add_incoming(data)
+					var complete = check_complete(data[0], data[1])
+					if complete != null:
+						handler.on_message(complete)
 				else:
 					print("Unknown UDP data: ", data)
 

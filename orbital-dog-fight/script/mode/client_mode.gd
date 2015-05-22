@@ -131,7 +131,7 @@ func _process(delta):
 func accepted(id, s):
 	player_id = id
 	ship = create_ship()
-	ship.set_pos(s.pos)
+	ship.set_pos(Vector2(s.pos.x, s.pos.y))
 	ship.set_rot(s.r)
 	curr_state.add_player(id, player_name, ship, null)
 	prediction[id] = get_prediction(s.pos, s.v, s.r, s.a)

@@ -1,4 +1,3 @@
-
 const CLIENT_CONNECT = 0
 const CLIENT_UPDATE_CTRL = 1
 const CLIENT_DISCONNECT = 2
@@ -93,7 +92,8 @@ class ServerNewPlayer:
 		return [cmd, id, name, ship]
 
 static func parse(data):
-	if typeof(data) != TYPE_ARRAY || data.size() < 1 || typeof(data[0]) != TYPE_INT:
+	var State = preload("res://script/net/state.gd")
+	if typeof(data) != TYPE_ARRAY || data.size() < 1: #|| typeof(data[0]) != TYPE_INT:
 		print("Invalid data " + str(data))
 		return null
 	var cmd = data[0]
@@ -112,12 +112,12 @@ static func parse(data):
 	elif cmd == SERVER_CLIENT_ACCEPTED:
 		if data.size() != 3 || typeof(data[1]) != TYPE_INT:
 			return null
-		return ServerClientAccepted.new(data[1], data[2])
+		return ServerClientAccepted.new(data[1], State.parse_ship_state(data[2]))
 	elif cmd == SERVER_STATE_UPDATE:
 		# TODO Check/parse state type?!
 		if data.size() != 2 || typeof(data[1]) != TYPE_DICTIONARY:
 			return null
-		return ServerStateUpdate.new(data[1])
+		return ServerStateUpdate.new(State.parse_game_state(data[1]))
 	elif cmd == SERVER_NEW_PLAYER:
 		# TODO Check ship/parse type?!
 		if data.size() != 4 || typeof(data[1]) != TYPE_INT || typeof(data[2]) != TYPE_STRING:

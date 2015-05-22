@@ -26,7 +26,9 @@ class ShipState:
 			my_ctrl = ship.ctrl
 		else:
 			my_ctrl = {fwd=false,bwd=false,tl=false,tr=false,lasers=false}
-		return {pos=ship.get_pos(),r=ship.get_rot(),v=ship.get_linear_velocity(),
+		var my_pos = ship.get_pos()
+		var my_v = ship.get_linear_velocity()
+		return {pos={x=my_pos.x, y=my_pos.y},r=ship.get_rot(),v={x=my_v.x, y=my_v.y},
 			a=ship.get_angular_velocity(),hp=ship.curr_hp,l=ship.laser_heat,ctrl=my_ctrl,d=ship.isdying}
 	
 	func update_state(s):
@@ -82,7 +84,9 @@ class LaserState:
 	
 	func get_state():
 		var laser = laserRef.get_ref()
-		return {p=laser.get_pos(),r=laser.get_rot(),v=laser.get_linear_velocity(),
+		var my_pos = laser.get_pos()
+		var my_v = laser.get_linear_velocity()
+		return {p={x=my_pos.x, y=my_pos.y},r=laser.get_rot(),v={x=my_v.x, y=my_v.y},
 			a=laser.get_angular_velocity(),t=laser.get_node("LifeTime").get_wait_time(),r=laser.get_rot()}
 	
 	func update_state(s):
@@ -101,6 +105,7 @@ class GameState:
 	var players = {}
 	var lasers = {}
 	var time = 0
+	var game_time = 0
 	var sync_interval = 0.1
 	
 	func add_player(id, name, ship, client):
@@ -148,7 +153,7 @@ class GameState:
 		return null
 	
 	func get_state():
-		var out = {p={},l={},i=sync_interval,t=time}
+		var out = {p={},l={},i=sync_interval,t=time,gt=game_time}
 		for k in players.keys():
 			out.p[k] = players[k].get_state()
 		for k in lasers.keys():
@@ -169,3 +174,29 @@ class GameState:
 			var p = players[k]
 			players.erase(k)
 			p.ship.get_ship().queue_free()
+
+func parse_game_state(state):
+	var new_p = {}
+	var new_l = {}
+	var keys = state.p.keys()
+	# Parse Players
+	for k in keys:
+		var p = state.p[k]
+		p.ship.pos = Vector2(p.ship.pos.x, p.ship.pos.y)
+		p.ship.v = Vector2(p.ship.v.x, p.ship.v.y)
+		new_p[int(k)] = p
+	state.p = new_p
+	# Parse lasers
+	keys = state.l.keys()
+	for k in keys:
+		var l = state.l[k]
+		l.p = Vector2(l.p.x, l.p.y)
+		l.v = Vector2(l.v.x, l.v.y)
+		new_l[int(k)] = l
+	state.l = new_l
+	return state
+
+func parse_ship_state(state):
+	state.pos = Vector2(state.pos.x, state.pos.y)
+	state.v = Vector2(state.v.x, state.v.y)
+	return state

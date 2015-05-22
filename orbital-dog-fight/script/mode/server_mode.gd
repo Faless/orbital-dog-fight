@@ -139,7 +139,8 @@ func send_sync_state():
 			to_remove.append(k)
 	for k in to_remove:
 		curr_state.lasers.erase(k)
-	server.broadcast(Command.ServerStateUpdate.new(curr_state.get_state()).get_msg())
+	curr_state.game_time += STATE_SYNC_DELAY
+	server.broadcast_udp(Command.ServerStateUpdate.new(curr_state.get_state()).get_msg())
 
 func player_join(client, stream, msg):
 	var id = randi()

@@ -16,6 +16,7 @@ var debug = null
 class UDPServer:
 	var handler = null
 	
+	const PAYLOAD_SIZE = 200
 	const PENDING_TIMEOUT = 10
 	var udpstream = PacketPeerUDP.new()
 	var udpclients = []
@@ -31,12 +32,31 @@ class UDPServer:
 	func close():
 		udpstream.close()
 	
+	var queue = []
+	func update():
+		if queue.size() > 0:
+			udpstream.set_send_address( queue[0].host, queue[0].port )
+			udpstream.put_var(queue[0].msg)
+			queue.remove(0)
+		pass
+	
 	func send_data(message, host, port):
-		udpstream.set_send_address( host, port )
-		udpstream.put_var(message)
+		var packet = {0:message}.to_json()
+		var packets = []
+		while packet.length() > PAYLOAD_SIZE:
+			packets.append(packet.left(PAYLOAD_SIZE))
+			packet = packet.right(PAYLOAD_SIZE)
+		packets.append(packet)
+		var id = randi()
+		var l = packets.size()
+		var i = 0
+		for p in packets:
+			queue.append({msg=[id, l, i, p],host=host,port=port})
+			i += 1
 	
 	func process_packets():
 		var obj
+		update()
 		while udpstream.get_available_packet_count() > 0:
 			var data = udpstream.get_var()
 			if typeof(data) == TYPE_INT:
@@ -141,15 +161,20 @@ func on_auth(id, stream, ip, port):
 	if stream != null:
 		stream.put_var([1, id])
 	#broadcast_udp(id)
-	#broadcast_udp([101, {name="Faless",ship={"t":9, "l":{}, "p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false, "fwd":false, "lasers":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}}.to_json()])
+	
+	#broadcast_udp([101, {name="Faless",ship={"t":9, "l":{}, "p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false, "fwd":false, "lasers":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}}])
 	#broadcast_udp([101, {"p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false, "fwd":false, "lasers":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}.to_json()])
-	#broadcast_udp([101, {"p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}.to_json()])
+	#broadcast_udp([101, {"p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}])
+	#var x = {"a":""}.to_json()
+	#print(x.length())
+	#print("aaaaaa".length())
+	#broadcast_udp([101, "aaaaaaaa"])
+	#broadcast_udp([101, x])
 	#broadcast_udp(15)
 	#broadcast_udp(["a", "b"])
 	#broadcast_udp(id)
 
 func broadcast_udp(message):
-	print("BROADCASTING!!!!!!!!!!!!!!!!!!!! ", message)
 	for c in udpserver.udpclients:
 		udpserver.send_data(message, c.address, c.port)
 
