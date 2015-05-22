@@ -102,10 +102,10 @@ func _process(delta):
 		if not prediction.has(k):
 			continue
 		var p = curr_state.players[k].ship.get_ship()
-		var from = p.get_pos()
+		var from = prediction[k][4]
 		var to = prediction[k][0]
 		p.set_pos(Vector2(lerp(from.x, to.x, weight), lerp(from.y, to.y, weight)))
-		var from_r = p.get_rot()
+		var from_r = prediction[k][5]
 		var to_r = prediction[k][2]
 		var ang = prediction[k][3]
 		if abs(from_r - to_r) < 0.15:
@@ -217,7 +217,7 @@ func get_prediction(pos, vel, rot, ang):
 		to_r -= 2*PI
 	elif to_r < -PI:
 		to_r += 2*PI
-	return [pos + vel * STATE_SYNC_DELAY, vel, to_r, sign(ang)]
+	return [pos + vel * STATE_SYNC_DELAY, vel, to_r, sign(ang), pos, rot]
 
 func create_ship():
 	var out = Ship.instance()
