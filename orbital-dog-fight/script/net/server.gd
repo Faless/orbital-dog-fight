@@ -27,6 +27,9 @@ func _ready():
 	#debug = get_node("Debug")
 	pass
 
+func _exit_tree():
+	stop()
+
 func start():
 	server = TCP_Server.new()
 	if server.listen( port, ["0.0.0.0"] ) == 0:

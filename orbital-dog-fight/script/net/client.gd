@@ -29,6 +29,10 @@ func _ready():
 	#debug = get_node("Debug")
 	pass
 
+func _exit_tree():
+	if is_conn:
+		disconnect()
+
 func connect():
 	conn = StreamPeerTCP.new()
 	conn.connect( ip, port )
