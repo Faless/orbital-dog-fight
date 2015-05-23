@@ -1,15 +1,19 @@
 # Orbital dog fight
 > I think it needs more lasers...
 
-This game was originally developed by for T-624-CGDD (Computer Game Design and
-Development) at Reykjavik University (2015):
+This game was originally developed for course T-624-CGDD (Computer Game Design
+and Development) at [Reykjavik University](http://www.ru.is/) (2015) by:
 - Fabio Alessandrelli <fabio.alessandrelli@gmail.com>
 - Gunnar Páll Gunnarsson <pallimoon@gmail.com>
 - Murray Tannock <murraytannock@gmail.com>
 
+![Orbital dog fight gameplay](http://i.imgur.com/Zw3gYJZ.png)
+
+# License
+
 All the code (gd script) is released under GPLv3 License (you can find a copy
-of the license in LICENSE.GPLv3). All assets and scenes are released
-under CC-BY-SA (you can find a copy of the license in LICENSE.CC-BY-SA),
+of the license in `LICENSE.GPLv3`). All assets and scenes are released
+under CC-BY-SA (you can find a copy of the license in `LICENSE.CC-BY-SA`),
 licenses for non-original assets can be found in the attributions section below.
 
 This program is distributed in the hope that it will be useful,
@@ -23,7 +27,7 @@ Please submit issues through the issue tracker on Github.
 See [the release page](https://github.com/Faless/orbital-dog-fight/releases/) for the current 
 release and download/installation instruction
 
-![Orbital dog fight gameplay](http://i.imgur.com/Zw3gYJZ.png)
+![Orbital dog fight LAN gameplay](http://i.imgur.com/vJoNu8i.png)
 
 ## Build Instructions
 To build this software the [GODOT](http://www.godotengine.org/) game
