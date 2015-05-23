@@ -12,7 +12,7 @@ func _ready():
 		Settings.load_defaults()
 		if Settings.save() != 0:
 			print("Unable to save config file, user settings will not be saved")
-	Settings.load(SettingsClass.PATH)
+	Settings.load_defaults()
 
 func set_game(m):
 	game = weakref(m)
@@ -109,7 +109,9 @@ class SettingsClass extends ConfigFile:
 		return .save(PATH)
 	
 	func _set_default(sec, name, value):
-		if get_value(sec, name) == null:
+		if not has_section(sec) or not has_section_key(sec, name) or \
+			typeof(get_value(sec,name)) != typeof(value):
+			print("Setting default: ", sec, ",", name, ": ", value)
 			set_value(sec, name, value)
 
 	func load_defaults():
@@ -123,9 +125,7 @@ class SettingsClass extends ConfigFile:
 		_set_default(SECTION_NETWORK, NETWORK_CLIENT_HOST, "127.0.0.1")
 		_set_default(SECTION_NETWORK, NETWORK_CLIENT_PORT, 4666)
 		_set_default(SECTION_NETWORK, NETWORK_SERVER_PORT, 4666)
-		
-		print(get_value(SECTION_BINDING, BINDING_P1_FWD))
-		
+		# Set defaults for key binding section
 		_set_default(SECTION_BINDING, BINDING_P1_FWD, ["W", KEY_W])
 		_set_default(SECTION_BINDING, BINDING_P1_BWD, ["S", KEY_S])
 		_set_default(SECTION_BINDING, BINDING_P1_TL, ["Q", KEY_Q])
