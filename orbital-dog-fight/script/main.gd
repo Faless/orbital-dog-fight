@@ -49,8 +49,8 @@ func _input(event):
 
 func _clear_scene():
 	get_node("/root/Heimdallr").game = null
-	var child = current.get_child(0)
-	if child:
+	if current.get_child_count() > 0:
+		var child = current.get_child(0)
 		current.remove_child(child)
 		child.queue_free()
 
