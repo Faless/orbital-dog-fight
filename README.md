@@ -23,6 +23,8 @@ Please submit issues through the issue tracker on Github.
 See [the release page](https://github.com/Faless/orbital-dog-fight/releases/) for the current 
 release and download/installation instruction
 
+![Orbital dog fight gameplay](http://i.imgur.com/Zw3gYJZ.png)
+
 ## Build Instructions
 To build this software the [GODOT](http://www.godotengine.org/) game
 engine is required <sup>[1](#myfootnote1)</sup>, as well as the
