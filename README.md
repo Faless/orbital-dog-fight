@@ -20,15 +20,8 @@ Please submit issues through the issue tracker on Github.
 
 ## Download Instructions
 
-The `bin` directory of this repository contains OSX, Linux and Windows binaries
-precompiled. These should run like any other application
--  OSX: it may be necessary to bypass Gatekeeper (by secondary clicking the icon
-and clicking open whilst holding the option key) in order to run the
-application.
-- Linux: make the binary file executable by using `chmod +x <filename>`
-- Server: To run an headless server version of the game (dedicated server)
-use the binary in bin/server passing as an argument "server.xml" 
-(ie. `./odf_server.bin server.xml`)
+See [the release page](https://github.com/Faless/orbital-dog-fight/releases/) for the current 
+release and download/installation instruction
 
 ## Build Instructions
 To build this software the [GODOT](http://www.godotengine.org/) game
