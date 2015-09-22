@@ -27,7 +27,7 @@ func tutorial():
 	else:
 		lasers = lasers[0]
 	tut_line1 = ["Welcome to Orbital Dog-fight!", "Welcome to Orbital Dog-fight!", "Shoot the asteroid before"]
-	tut_line2 = ["Go forward with " + fwd + ".\nTurn with " + tl + " and " + tr, "Press " + lasers + " to shoot", "it destroys your planet!"]
+	tut_line2 = ["Go forward with " + str(fwd) + ".\nTurn with " + str(tl) + " and " + str(tr), "Press " + str(lasers) + " to shoot", "it destroys your planet!"]
 	set_screen_text(tut_line1[0], tut_line2[0])
 	get_node("TutorialTimer").start()
 
