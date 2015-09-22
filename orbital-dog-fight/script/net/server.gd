@@ -159,7 +159,7 @@ func on_message(client, stream, message):
 
 func on_auth(id, stream, ip, port):
 	if stream != null:
-		stream.put_var([1, id])
+		stream.put_var([1, [id, port]])
 
 func broadcast_udp(message):
 	for c in udpserver.udpclients:

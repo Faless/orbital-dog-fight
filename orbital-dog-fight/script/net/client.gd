@@ -33,6 +33,9 @@ class UDPClient:
 	func close():
 		udpstream.close()
 	
+	func listen(port):
+		udpstream.listen(port)
+	
 	func add_incoming(data):
 		#print("Received partial message: ", data)
 		var id = data[0]
@@ -40,7 +43,7 @@ class UDPClient:
 		if not incoming.has(id):
 			incoming[id] = [{},OS.get_unix_time() + UDP_LIFETIME]
 		incoming[id][0][c] = data[3]
-		
+	
 	func check_complete(id, len):
 		if incoming[id][0].keys().size() == len:
 			var s = ""
@@ -179,9 +182,10 @@ func _fixed_process(delta):
 				udp_pending = true
 				udp_timer = OS.get_unix_time() + UDP_TIMEOUT
 			elif data[0] == 1:
-				if data[1] == udp_id:
+				if data[1][0] == udp_id:
 					udp_pending = false
 					udp_conn = true
+					udpstream.listen(data[1][1])
 			else:
 				on_message(data[1])
 	# Disconnect on network failure

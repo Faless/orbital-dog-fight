@@ -175,7 +175,7 @@ class GameState:
 			players.erase(k)
 			p.ship.get_ship().queue_free()
 
-func parse_game_state(state):
+static func parse_game_state(state):
 	var new_p = {}
 	var new_l = {}
 	var keys = state.p.keys()
@@ -196,7 +196,7 @@ func parse_game_state(state):
 	state.l = new_l
 	return state
 
-func parse_ship_state(state):
+static func parse_ship_state(state):
 	state.pos = Vector2(state.pos.x, state.pos.y)
 	state.v = Vector2(state.v.x, state.v.y)
 	return state
