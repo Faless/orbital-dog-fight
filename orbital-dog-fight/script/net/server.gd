@@ -160,19 +160,6 @@ func on_message(client, stream, message):
 func on_auth(id, stream, ip, port):
 	if stream != null:
 		stream.put_var([1, id])
-	#broadcast_udp(id)
-	
-	#broadcast_udp([101, {name="Faless",ship={"t":9, "l":{}, "p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false, "fwd":false, "lasers":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}}])
-	#broadcast_udp([101, {"p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false, "fwd":false, "lasers":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}.to_json()])
-	#broadcast_udp([101, {"p":{1633176173:{"score":0, "ship":{"d":false, "l":0, "ctrl":{"bwd":false, "tr":false, "tl":false}, "v":"150,0", "hp":0, "a":0, "r":0, "pos":"915,200"}, "id":1633176173, "name":"Unamed Player"}}, "i":0.1}])
-	#var x = {"a":""}.to_json()
-	#print(x.length())
-	#print("aaaaaa".length())
-	#broadcast_udp([101, "aaaaaaaa"])
-	#broadcast_udp([101, x])
-	#broadcast_udp(15)
-	#broadcast_udp(["a", "b"])
-	#broadcast_udp(id)
 
 func broadcast_udp(message):
 	for c in udpserver.udpclients:

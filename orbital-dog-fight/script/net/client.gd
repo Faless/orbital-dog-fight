@@ -201,6 +201,3 @@ func print_debug(mess):
 		debug.newline()
 	else:
 		print(str(mess))
-
-func _exit_tree():
-	disconnect()
